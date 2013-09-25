@@ -25,9 +25,16 @@ class ServiceProvider extends BaseServiceProvider {
 	{
 		
 		//Config::package('kevbaldwyn/laravel-cart', __DIR__.'/../../config');
+		$app = $this->app;
+		$this->app['kevbaldwyn.laravelcart.model'] = $this->app->share(function($app)
+		{
+			//$model = $app['config']['kevbaldwyn/laravel-cart::cart.model'];
+			$model = '\KevBaldwyn\LaravelCart\Models\Basket';
+			return new $model;
+		});
 
-		$this->app->bind('kevbaldwyn.laravelcart', function() {
-			return new LaravelCart();
+		$this->app->bind('kevbaldwyn.laravelcart', function() use($app) {
+			return new LaravelCart($app['kevbaldwyn.laravelcart.model']);
 		});
 
 	}
