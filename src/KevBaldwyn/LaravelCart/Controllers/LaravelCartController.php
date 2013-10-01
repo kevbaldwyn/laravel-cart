@@ -1,5 +1,7 @@
 <?php namespace KevBaldwyn\LaravelCart\Controllers;
 
-class LaravelCartController {
+use BaseController;
+
+class LaravelCartController extends BaseController {
 	
 }

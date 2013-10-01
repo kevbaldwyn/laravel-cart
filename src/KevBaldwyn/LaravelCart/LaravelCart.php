@@ -13,6 +13,12 @@ class LaravelCart {
 	}
 
 
+	public function get() 
+	{
+		return $this->cartModel->where('session_id', Session::getId())->get();
+	}
+
+
 	public function addModel($model) 
 	{
 		$modelName = get_class($model);
@@ -24,7 +30,8 @@ class LaravelCart {
 
 	public function add($modelName, $modelId, $quantity = 1) 
 	{
-		$exists = $this->cartModel->where('session_id', Session::getId())
+		$sessionId = Session::getId();
+		$exists = $this->cartModel->where('session_id', $sessionId)
 								  ->where('model', $modelName)
 								  ->where('model_id', $modelId)->first();
 
@@ -37,7 +44,7 @@ class LaravelCart {
 			Session::push('laravel_cart.items', $data);
 
 			// save to db
-			$data['session_id'] = Session::getId();
+			$data['session_id'] = $sessionId;
 			$this->cartModel->create($data);
 		}
 	}
