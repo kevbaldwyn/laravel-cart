@@ -20,4 +20,13 @@ class Collection extends BaseCollection {
 		parent::__construct($items);
 	}
 
+
+	public function quantity() {
+		$quantity = array(0);
+		foreach ($this->items as $model) {
+			$quantity[] = $model->quantity;
+		}
+		return array_sum($quantity);
+	}
+
 }

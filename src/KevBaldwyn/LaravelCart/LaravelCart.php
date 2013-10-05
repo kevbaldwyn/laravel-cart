@@ -19,6 +19,12 @@ class LaravelCart {
 	}
 
 
+	public function getTotalQuantity() 
+	{
+		return $this->getItems()->quantity();
+	}
+
+
 	public function addModel($model) 
 	{
 		$modelName = get_class($model);
