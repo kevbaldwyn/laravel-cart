@@ -30,10 +30,7 @@ class LaravelCart {
 
 	public function add($modelName, $modelId, $quantity = 1) 
 	{
-		$sessionId = Session::getId();
-		$exists = $this->cartModel->where('session_id', $sessionId)
-								  ->where('model', $modelName)
-								  ->where('model_id', $modelId)->first();
+		$exists = $this->getItem($modelName, $modelId);
 
 		if(is_null($exists)) {
 			$data = array('model'    => $modelName, 
@@ -41,7 +38,7 @@ class LaravelCart {
 						  'quantity' => $quantity);
 
 			// save to db
-			$data['session_id'] = $sessionId;
+			$data['session_id'] = Session::getId();
 			$this->cartModel->create($data);
 		}
 	}
@@ -49,15 +46,21 @@ class LaravelCart {
 
 	public function update($modelName, $modelId, $quantity = 1) 
 	{
-		$sessionId = Session::getId();
-		$item = $this->cartModel->where('session_id', $sessionId)
-								  ->where('model', $modelName)
-								  ->where('model_id', $modelId)->first();
+		$item = $this->getItem($modelName, $modelId);
 
 		if($quantity > 0) {
 			$item->quantity = $quantity;
+			$item->save();
+		}else{
+			$item->delete();
 		}
-		$item->save();
+	}
+
+
+	private function getItem($modelName, $modelId) {
+		return $this->cartModel->where('session_id', Session::getId())
+								  ->where('model', $modelName)
+								  ->where('model_id', $modelId)->first();
 	}
 
 }
