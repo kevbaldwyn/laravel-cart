@@ -13,9 +13,9 @@ class LaravelCart {
 	}
 
 
-	public function get() 
+	public function getItems() 
 	{
-		return $this->cartModel->where('session_id', Session::getId())->get();
+		return new Models\Collection( $this->cartModel->where('session_id', Session::getId())->get() );
 	}
 
 
@@ -40,13 +40,24 @@ class LaravelCart {
 						  'model_id' => $modelId,
 						  'quantity' => $quantity);
 
-			// save to session
-			Session::push('laravel_cart.items', $data);
-
 			// save to db
 			$data['session_id'] = $sessionId;
 			$this->cartModel->create($data);
 		}
+	}
+
+
+	public function update($modelName, $modelId, $quantity = 1) 
+	{
+		$sessionId = Session::getId();
+		$item = $this->cartModel->where('session_id', $sessionId)
+								  ->where('model', $modelName)
+								  ->where('model_id', $modelId)->first();
+
+		if($quantity > 0) {
+			$item->quantity = $quantity;
+		}
+		$item->save();
 	}
 
 }
