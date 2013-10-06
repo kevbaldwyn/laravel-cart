@@ -63,6 +63,17 @@ class LaravelCart {
 	}
 
 
+	public function hasItem($modelName, $modelId) 
+	{
+		$item = $this->getItem($modelName, $modelId);
+		if(!is_null($item)) {
+			return true;
+		}else{
+			return false;
+		}
+	}
+
+
 	private function getItem($modelName, $modelId) {
 		return $this->cartModel->where('session_id', Session::getId())
 								  ->where('model', $modelName)
