@@ -6,6 +6,7 @@ use \Eloquent;
 class LaravelCart {
 
 	private $cartModel;
+	private $items;
 
 	public function __construct(Eloquent $cartModel) 
 	{
@@ -15,13 +16,48 @@ class LaravelCart {
 
 	public function getItems() 
 	{
-		return new Models\Collection( $this->cartModel->where('session_id', Session::getId())->get() );
+		if(is_null($this->items)) {
+			$this->items = new Models\Collection( $this->cartModel->where('session_id', Session::getId())->get() );
+		}
+		return $this->items;
 	}
 
 
 	public function getTotalQuantity() 
 	{
 		return $this->getItems()->quantity();
+	}
+
+
+	public function getTotalShipping()
+	{
+		$shipping = 0;
+		foreach($this->getItems() as $item) {
+			$shipping += $item->getShippingCost();
+		}
+		return $shipping;
+	}
+
+
+	public function getTotalPrice() 
+	{
+		$value = 0;
+		foreach($this->getItems() as $item) {
+			$value += $item->getLinePrice();
+		}
+		return $value;
+	}
+
+
+	public function getTotalDiscounts() 
+	{
+		return 0.00;
+	}
+
+
+	public function getFinalPrice() 
+	{
+		return $this->getTotalPrice() + $this->getTotalShipping() - $this->getTotalDiscounts();
 	}
 
 

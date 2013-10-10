@@ -4,4 +4,6 @@ interface ProductInterface {
 	
 	public function getLinePrice();
 
+	public function getShippingCost();
+
 }
