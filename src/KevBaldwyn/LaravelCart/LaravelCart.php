@@ -43,7 +43,7 @@ class LaravelCart {
 	{
 		$value = 0;
 		foreach($this->getItems() as $item) {
-			$value += $item->getLinePrice();
+			$value += $item->getLinePrice() * $item->quantity;
 		}
 		return $value;
 	}
