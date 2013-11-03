@@ -110,7 +110,7 @@ class LaravelCart {
 	}
 
 
-	public function empty()
+	public function emptyCart()
 	{
 		$items = $this->getItems();
 		if(count($items) > 0) {
