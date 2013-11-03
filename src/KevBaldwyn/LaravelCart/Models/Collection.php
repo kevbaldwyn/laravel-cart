@@ -11,12 +11,13 @@ class Collection extends BaseCollection {
 
 		// hydrate and create each model
 		// allows us to have lots of different types of model in the basket at the same time
-		foreach($tmpItems as $item) {
-			$obj = App::make($item->model)->find($item->model_id);
-			$obj->quantity = $item->quantity;
-			$items[] = $obj;
+		if(count($tmpItems) > 0) {
+			foreach($tmpItems as $item) {
+				$obj = App::make($item->model)->find($item->model_id);
+				$obj->quantity = $item->quantity;
+				$items[] = $obj;
+			}
 		}
-
 		parent::__construct($items);
 	}
 
