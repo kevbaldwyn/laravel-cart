@@ -110,6 +110,17 @@ class LaravelCart {
 	}
 
 
+	public function empty()
+	{
+		$items = $this->getItems();
+		if(count($items) > 0) {
+			foreach($items as $item) {
+				$item->delete();
+			}
+		}
+	}
+
+
 	private function getItem($modelName, $modelId) {
 		return $this->cartModel->where('session_id', Session::getId())
 								  ->where('model', $modelName)
