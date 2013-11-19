@@ -132,6 +132,7 @@ class LaravelCart {
 				$item->delete();
 			}
 		}
+		Session::put($this->sessionName, array());
 	}
 
 
