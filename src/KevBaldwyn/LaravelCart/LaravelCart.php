@@ -5,6 +5,8 @@ use \Eloquent;
 
 class LaravelCart {
 
+	private $sessionName = 'laravel_cart';
+
 	private $cartModel;
 	private $items;
 
@@ -49,8 +51,20 @@ class LaravelCart {
 	}
 
 
-	public function getTotalDiscounts() 
+	public function setDiscount($amount, $key = 'default')
 	{
+		Session::put($this->sessionName . '.discount.' . $key, $amount);
+	}
+
+
+	public function getTotalDiscounts($key = null) 
+	{
+		if(!is_null($key)) {
+			return Session::get($this->sessionName . '.discount.' . $key, 0.00);
+		}
+		if(!is_null(Session::get($this->sessionName . '.discount'))) {
+			return array_sum(Session::get($this->sessionName . '.discount'));
+		}
 		return 0.00;
 	}
 
