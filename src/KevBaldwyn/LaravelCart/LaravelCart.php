@@ -47,7 +47,7 @@ class LaravelCart {
 		foreach($this->getItems() as $item) {
 			$value += $item->getLinePrice() * $item->quantity;
 		}
-		return $value;
+		return number_format($value, 2);
 	}
 
 
@@ -63,7 +63,7 @@ class LaravelCart {
 			return Session::get($this->sessionName . '.discount.' . $key, 0.00);
 		}
 		if(!is_null(Session::get($this->sessionName . '.discount'))) {
-			return array_sum(Session::get($this->sessionName . '.discount'));
+			return number_format(array_sum(Session::get($this->sessionName . '.discount')), 2);
 		}
 		return 0.00;
 	}
@@ -71,7 +71,7 @@ class LaravelCart {
 
 	public function getFinalPrice() 
 	{
-		return $this->getTotalPrice() + $this->getTotalShipping() - $this->getTotalDiscounts();
+		return number_format($this->getTotalPrice() + $this->getTotalShipping() - $this->getTotalDiscounts(), 2);
 	}
 
 
